@@ -1,5 +1,6 @@
 -- ACTUAL WORK HAPPENS HERE
 
+
 function contains(t, e)
   for i = 1,#t do
     if t[i] == e then return true end
@@ -31,11 +32,42 @@ function memoryWrite(addr, value, size)
 	end
 end
 
-function recordChanged(record, value, previousValue, receiving,addr)
+function recordChanged(record, value, previousValue, receiving, addr)
 	local allow = true
 
 	if type(record.kind) == "function" then
 		allow, value = record.kind(value, previousValue, receiving)
+	elseif record.kind == "MMXHealthShare" then
+		if opts.hpshare then
+			if record.stype == "uHighsLow" then
+				allow = previousValue > value
+				if value >= previousValue then record.cache = value end
+			elseif record.stype == "uLowsHigh" then
+				allow = value > previousValue
+				if previousValue >= value then record.cache = value end
+			elseif record.stype == "uInstantRefill" then
+        local state = memory.readbyte(0x7E0B9D)
+        if state ~= 0x00 then
+				  local maxHealth = memory.readbyte(0x7E1F9A)
+				  value = math.min(value, maxHealth)
+				  allow = value ~= previousValue
+          record.name = nil
+          record.verb = nil
+          if receiving and value == 0x00 and allow then
+  					local currentHealth = memory.readbyte(0x7E0BCF)
+  					memory.writebyte(0x7E0373, currentHealth)
+            record.name = "- Press F to Pay Respects."
+            record.verb = "died"
+          end
+        elseif not receiving then
+          allow = (value == 0x00) and (value ~= previousValue)
+				else
+          allow = false
+				end
+			end
+		else
+			allow = false
+		end
 	elseif record.kind == "HealthShare" then
 		if opts.hpshare then
 			if record.stype == "uHighsLow" then
@@ -74,8 +106,8 @@ function recordChanged(record, value, previousValue, receiving,addr)
 		else
 			allow = false
 		end
-	elseif record.kind == "MagicShare" then
-		if opts.magicshare then
+	elseif record.kind == "ammoshare" then
+		if opts.ammoshare then
 			if record.stype == "uHighsLow" then
 				allow = previousValue > value
 				if value >= previousValue then record.cache = value end
@@ -130,6 +162,54 @@ function recordChanged(record, value, previousValue, receiving,addr)
 
 		allow = maskedValue ~= maskedPreviousValue               -- Did operated-on bits change?
 		value = OR(previousValue, maskedValue)                   -- Copy operated-on bits back into value
+		
+		--Test
+		
+		if record.nameBitmap then
+					names = {}
+					for b=0,7 do
+						if 0 ~= AND(BIT(b), value) and 0 == AND(BIT(b), previousValue) then
+							if msgMask then
+								if 0 ~= AND(BIT(b), msgMask) then
+									table.insert(names, record.nameBitmap[b + 1])
+								end
+							else
+								table.insert(names, record.nameBitmap[b + 1])
+							end
+						end
+					end
+					if next(names) == nil then
+						names = nil
+					end
+				end
+
+				if names then
+					local verb = record.verb or "got"
+					for i, v in ipairs(names) do
+						--message("Partner " .. verb .. " " .. v)
+						if v == "Mammoth Sub-tank" then tanks.mammoth = true
+						elseif v == "Mandrill Sub-tank" then tanks.mandrill = true
+						elseif v == "Armadillo Sub-tank" then tanks.armadillo = true
+						elseif v == "Eagle Sub-tank" then tanks.eagle  = true
+						elseif v == "Head (Butt) Upgrade" then upgrades.head = true
+						elseif v == "Arm (Buster) Upgrade" then upgrades.arm = true
+						elseif v == "Body (Armor) Upgrade" then upgrades.body = true
+						elseif v == "Boots (Dash) Upgrade" then upgrades.boots = true
+						elseif v == "Mammoth Heart" then hearts.mammoth = true
+						elseif v == "Mandrill Heart" then hearts.mandrill = true
+						elseif v == "Armadillo Heart" then hearts.armadillo = true
+						elseif v == "Eagle Heart" then hearts.eagle = true
+						elseif v == "Penguin Heart" then hearts.penguin = true
+						elseif v == "Chameleon Heart" then hearts.chameleon = true
+						elseif v == "Kuwanger Heart" then hearts.kuwanger = true
+						elseif v == "Octopus Heart" then hearts.octopus = true
+						end
+					end
+				end
+		
+		
+		
+		--End test
 	elseif record.kind == "custom" then
 		--print("got custom v="..value.." pv="..previousValue)
 	elseif record.kind == "clock" then
@@ -183,7 +263,7 @@ function recordChanged(record, value, previousValue, receiving,addr)
 		end
 	end
 
-	if allow and record.kind == "key" and opts.retromode then
+	if allow and record.kind == "key" and opts.dashmode then
 		memory.writebyte(0x7EF38B, value)
 	end
 
@@ -247,7 +327,7 @@ function GameDriver:checkFirstRunning() -- Do first-frame bootup-- only call if 
 	if not self.didCache then
 		if driverDebug then print("First moment running") end
 		message("Coop mode: " .. self.spec.guid)
-
+		
 		if self.forceSend then message("Syncing...") end
 		for k,v in pairs(self.spec.sync) do -- Enter all current values into cache so we don't send pointless 0 values later
 			local value = memoryRead(k, v.size)
@@ -277,6 +357,10 @@ function GameDriver:checkFirstRunning() -- Do first-frame bootup-- only call if 
 end
 
 function GameDriver:childTick()
+	DrawGUIOverlay()
+	if opts.dashmode and memory.readbyte(0x7E1F99) == 0 then 
+		memory.writebyte(0x7E1F99, 0x8)
+	end
 	if self:isRunning(false) then
 		self:checkFirstRunning()
 
@@ -406,6 +490,23 @@ function GameDriver:handleTable(t)
 					local verb = record.verb or "got"
 					for i, v in ipairs(names) do
 						message("Partner " .. verb .. " " .. v)
+						if v == "Mammoth Sub-tank" then tanks.mammoth = true
+						elseif v == "Mandrill Sub-tank" then tanks.mandrill = true
+						elseif v == "Armadillo Sub-tank" then tanks.armadillo = true
+						elseif v == "Eagle Sub-tank" then tanks.eagle  = true
+						elseif v == "Head (Butt) Upgrade" then upgrades.head = true
+						elseif v == "Arm (Buster) Upgrade" then upgrades.arm = true
+						elseif v == "Body (Armor) Upgrade" then upgrades.body = true
+						elseif v == "Boots (Dash) Upgrade" then upgrades.boots = true
+						elseif v == "Mammoth Heart" then hearts.mammoth = true
+						elseif v == "Mandrill Heart" then hearts.mandrill = true
+						elseif v == "Armadillo Heart" then hearts.armadillo = true
+						elseif v == "Eagle Heart" then hearts.eagle = true
+						elseif v == "Penguin Heart" then hearts.penguin = true
+						elseif v == "Chameleon Heart" then hearts.chameleon = true
+						elseif v == "Kuwanger Heart" then hearts.kuwanger = true
+						elseif v == "Octopus Heart" then hearts.octopus = true
+						end
 					end
 				else
 					if driverDebug then print("Updated anonymous address " .. tostring(addr) .. " to " .. tostring(value)) end

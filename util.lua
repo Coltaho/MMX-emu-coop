@@ -1,14 +1,259 @@
 -- GLOBALS
 opts = {
 	hpshare = false,
-	magicshare = false,
-	retromode = false
+	ammoshare = false,
+	dashmode = false
+}
+
+myweapons = {
+	"homing",
+	"sting",
+	"shield",
+	"fire",
+	"storm",
+	"spark",
+	"cutter",
+	"ice"
+}
+					
+weapons = {
+	homing = false,
+	sting = false,
+	shield = false,
+	fire = false,
+	storm = false,
+	spark = false,
+	cutter = false,
+	ice = false
+}
+
+myhearts = {
+	"octopus",
+	"chameleon",
+	"armadillo",
+	"mammoth",
+	"eagle",
+	"mandrill",
+	"kuwanger",
+	"penguin"
+}
+
+hearts = {
+	octopus = false,
+	chameleon = false,
+	armadillo = false,
+	mammoth = false,
+	eagle = false,
+	mandrill = false,
+	kuwanger = false,
+	penguin = false	
+}
+
+mytanks = {
+	"armadillo",
+	"mammoth",
+	"eagle",
+	"mandrill"
+}
+
+tanks = {
+	armadillo = false,
+	mammoth = false,
+	eagle = false,
+	mandrill = false
+}
+
+myupgrades = {
+	"boots",
+	"head",
+	"body",
+	"arm",
+	"hado"
+}
+
+upgrades = {
+	boots = false,
+	head = false,
+	body = false,
+	arm = false,
+	hado = false
+}
+
+locations = {
+	sigma = 0,
+	partnerlocation = 0
 }
 
 -- UTILITIES
 
 function nonempty(s) return s and s ~= "" end
 function nonzero(s) return s and s ~= 0 end
+
+pngImage = require("png")
+
+--Collected weapon icons
+local weaponIcons = {
+						pngImage("./images/homing.png", nil, false, false),
+						pngImage("./images/sting.png", nil, false, false),
+						pngImage("./images/shield.png", nil, false, false),
+						pngImage("./images/fire.png", nil, false, false),
+						pngImage("./images/storm.png", nil, false, false),	
+						pngImage("./images/spark.png", nil, false, false),
+						pngImage("./images/cutter.png", nil, false, false),
+						pngImage("./images/ice.png", nil, false, false)
+					}
+--Greyed out weapon icons
+local weaponuIcons = {
+						pngImage("./images/homingu.png", nil, false, false),
+						pngImage("./images/stingu.png", nil, false, false),
+						pngImage("./images/shieldu.png", nil, false, false),
+						pngImage("./images/fireu.png", nil, false, false),
+						pngImage("./images/stormu.png", nil, false, false),	
+						pngImage("./images/sparku.png", nil, false, false),
+						pngImage("./images/cutteru.png", nil, false, false),
+						pngImage("./images/iceu.png", nil, false, false)
+					}
+				
+			
+local sigmaIcons = {
+						pngImage("./images/one.png", nil, false, false),
+						pngImage("./images/two.png", nil, false, false),
+						pngImage("./images/three.png", nil, false, false),
+						pngImage("./images/four.png", nil, false, false)
+					}
+	
+local etankIcon = pngImage("./images/etank.png", nil, false, false)
+local heartIcon = pngImage("./images/heart.png", nil, false, false)
+local heartuIcon = pngImage("./images/heartu.png", nil, false, false)
+local oneupIcon = pngImage("./images/oneup.png", nil, false, false)
+
+
+local upgradeIcons = {
+						pngImage("./images/boots.png", nil, false, false),
+						pngImage("./images/helmet.png", nil, false, false),
+						pngImage("./images/body.png", nil, false, false),
+						pngImage("./images/arm.png", nil, false, false),
+						pngImage("./images/hado.png", nil, false, false)
+					}
+					
+local upgradeuIcons = {
+						pngImage("./images/bootsu.png", nil, false, false),
+						pngImage("./images/helmetu.png", nil, false, false),
+						pngImage("./images/bodyu.png", nil, false, false),
+						pngImage("./images/armu.png", nil, false, false)
+					}
+
+function DrawGUIOverlay()
+	--Draw weapons
+	for i = 1, 8 do
+		if weapons[myweapons[i]] then
+			drawIcon(weaponIcons[i], i*16, 208)
+		else
+			drawIcon(weaponuIcons[i], i*16, 208)
+		end
+	end
+	
+	--Draw partner location
+	if locations.partnerlocation > 0 and locations.partnerlocation < 10 then
+		drawIcon(oneupIcon, locations.partnerlocation * 16, 216, "#000000")
+	end
+    
+	--Draw hearts  
+	for i = 1, 8 do
+		if hearts[myhearts[i]] then
+			drawIcon(heartIcon, i * 16, 200, "#000000")
+		end
+	end
+	
+	--Draw subtanks
+	for i = 1, 4 do
+		if tanks[mytanks[i]] then
+			drawIcon(etankIcon, ((i + 2) * 16) + 8, 200, "#000000")
+		end
+	end
+	
+	--Draw Current Sigma
+	if locations.sigma > 0 then
+		drawIcon(sigmaIcons[locations.sigma], 146, 208)
+	end
+	
+	--Draw Current Upgrades
+	for i = 1, 4 do
+		if upgrades[myupgrades[i]] then
+			drawIcon(upgradeIcons[i], 148 + (i * 16), 208)
+		else
+			drawIcon(upgradeuIcons[i], 148 + (i * 16), 208)
+		end
+	end
+	
+	--Draw Hado upgrade over helmet if we have it
+	if upgrades[myupgrades[5]] then
+		drawIcon(upgradeIcons[5], 180, 208)
+	end
+end
+   
+   function drawIcon(icon, offx, offy, transparent)
+   for h = 1, icon.height do
+		for w = 1, icon.width do
+			local hexadecimal = '#'
+			r = rgbToHex(icon.pixels[h][w].R)
+			g = rgbToHex(icon.pixels[h][w].G)
+			b = rgbToHex(icon.pixels[h][w].B)
+			a = rgbToHex(icon.pixels[h][w].A)
+			
+			hexadecimal = hexadecimal .. r .. g .. b
+
+			if transparent ~= nil then
+				if transparent ~= hexadecimal then
+					gui.pixel(w + offx, h + offy, hexadecimal)
+				end
+			else
+				gui.pixel(w + offx, h + offy, hexadecimal)
+			end
+		end
+	end
+end
+
+function rgbToHex(value)
+	
+		local hex = ''
+
+		while(value > 0)do
+			local index = math.fmod(value, 16) + 1
+			value = math.floor(value / 16)
+			hex = string.sub('0123456789ABCDEF', index, index) .. hex			
+		end
+
+		if(string.len(hex) == 0)then
+			hex = '00'
+
+		elseif(string.len(hex) == 1)then
+			hex = '0' .. hex
+		end
+
+	return hex
+end
+  
+  
+function rgbToHex(value)
+	
+		local hex = ''
+
+		while(value > 0)do
+			local index = math.fmod(value, 16) + 1
+			value = math.floor(value / 16)
+			hex = string.sub('0123456789ABCDEF', index, index) .. hex			
+		end
+
+		if(string.len(hex) == 0)then
+			hex = '00'
+
+		elseif(string.len(hex) == 1)then
+			hex = '0' .. hex
+		end
+
+	return hex
+end
 
 -- TICKER
 
@@ -109,6 +354,7 @@ function printMessage()
 		end
 	end
 	if msg then
-		gui.text(5, 254-40, msg)
+		--DrawGUIOverlay()
+		gui.text(5, 2, msg) --254-40
 	end
 end
