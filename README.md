@@ -1,4 +1,4 @@
-# emu-coop
+# MMX Co-op (emu-coop)
 
 This directory contains some Lua scripts that, when loaded by a compliant emulator such as snes9x-rr/snes9x-coop, can synchronize emulator state over the internet (allowing "cooperative" playthroughs of single-player games).
 
