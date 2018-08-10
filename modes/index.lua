@@ -2,7 +2,5 @@
 -- If your file is named "lttp.lua", put it in the table like "modes.lttp".
 
 modes = {
-	require "modes.lttp",
-	require "modes.lttp_randomizer_identseeds",
-	require "modes.lttp_randomizer_diffseeds"
+	require "modes.mmx"
 }
