@@ -84,6 +84,8 @@ locations = {
 	partnerlocation = 0
 }
 
+selectedWeapon = 0
+
 -- UTILITIES
 
 function nonempty(s) return s and s ~= "" end
@@ -190,6 +192,14 @@ function DrawGUIOverlay()
 	if upgrades[myupgrades[5]] then
 		drawIcon(upgradeIcons[5], 180, 208)
 	end
+	
+	--Reads selected weapon every frame (multiple of 2 so divided by to for 1 - 8)
+	--Then draws a box around the icons
+	selectedWeapon = memory.readbyte(0x7E0BDB) / 2
+	if selectedWeapon ~= 0 then
+		gui.box(selectedWeapon * 16 + 1, 208, (selectedWeapon * 16) + 16, 223, "#FFFFFF00", "#FFFF00FF")
+	end
+	
 end
    
    function drawIcon(icon, offx, offy, transparent)
