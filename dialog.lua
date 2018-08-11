@@ -8,13 +8,13 @@ function ircDialog()
 	local res, server, port, nick, partner, forceSend, dashmode, hpshare, ammoshare  = iup.GetParam("Connection settings", nil,
 	    "Enter an IRC server: %s\n" ..
 		"IRC server port: %i\n" ..
-		"Do NOT use actual SRL nick!" ..
-		"Pick something else" ..
+		"%t\n" .. 
+		"Do NOT use actual SRL nick!%t\n" .. 
 		"Your nick: %s\n" ..
 		"Partner nick: %s\n" ..
 		"%t\n" .. -- <hr>
-		"Are you restarting\rafter a crash? %b\n" ..
-		"%t\n" ..
+		"[NYI]Are you restarting\rafter a crash? %b\n" ..
+		"Options%t\n" ..
 		"Dash mode? %b\n" ..
 		"[NYI]Current Health share? %b\n" ..
 		"[NYI]Ammo share? %b\n"		
