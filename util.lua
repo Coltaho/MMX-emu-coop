@@ -2,7 +2,8 @@
 opts = {
 	hpshare = false,
 	ammoshare = false,
-	dashmode = false
+	dashmode = false,
+	overlay = false
 }
 
 myweapons = {
@@ -147,14 +148,20 @@ local upgradeuIcons = {
 					
 local selectedWeapon = 0
 local frameCounter = 0
+local xhp = 0
 
+local soulSplit = {
+					dash = pngImage("./images/hpdash.png", nil, false, false),
+					background = pngImage("./images/hpbackground.png", nil, false, false)
+				  }
 function DrawGUIOverlay()
 	--Draw weapons
-	if weapons.count ~= 8 then weapons.count = 0 end
+	local weaponCount = 0
+	
 	for i = 1, 8 do
 		if weapons[myweapons[i]] then
 			drawIcon(weaponIcons[i], i*16, 207)
-			if weapons.count ~= 8 then weapons.count = weapons.count + 1 end
+			weaponCount = weaponCount + 1
 		else
 			drawIcon(weaponuIcons[i], i*16, 207)
 		end
@@ -178,7 +185,7 @@ function DrawGUIOverlay()
 	end
 	
 	--Draw Current Sigma
-	if weapons.count == 8 and locations.sigma == 0 then 
+	if weaponCount == 8 and locations.sigma == 0 then 
 		drawIcon(sigmaIcons[locations.sigma + 1], 146, 207)
 	else
 		drawIcon(sigmaIcons[locations.sigma + 1], 146, 207)
@@ -200,8 +207,11 @@ function DrawGUIOverlay()
 	
 	--Reads selected weapon every frame (multiple of 2 so divided by to for 1 - 8)
 	--Then draws a box around the icons
+	
+	
 	if frameCounter >= 10 then
 		selectedWeapon = memory.readbyte(0x7E0BDB) / 2
+		xhp = memory.readbyte(0x7E0BCF)
 		frameCounter = 0
 	end
 	
@@ -213,6 +223,15 @@ function DrawGUIOverlay()
 	if locations.partnerlocation > 0 and locations.partnerlocation < 10 then
 		drawIcon(oneupIcon, locations.partnerlocation * 16, 216, "#000000")
 	end
+	
+	if opts.hpshare then
+		drawIcon(soulSplit["background"], 9, 12, "#FF0000")
+		for i = 1, xhp do
+			drawIcon(soulSplit["dash"], 13, 79 - (i * 2), "#FF0000")
+		end
+	end
+	
+	
 	
 	frameCounter = frameCounter + 1
 end

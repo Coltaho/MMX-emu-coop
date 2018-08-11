@@ -75,6 +75,7 @@ if emu.emulating() then
 				opts.hpshare = data.hpshare
 				opts.ammoshare = data.ammoshare
 				opts.dashmode = data.dashmode
+				opts.overlay = data.overlay
 				upgrades.boots = data.dashmode
 				
 				mainDriver = GameDriver(spec, data.forceSend) -- Notice: This is a global, specs can use it

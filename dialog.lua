@@ -5,7 +5,7 @@ local optionLetter = "o"
 if FCEU then optionLetter = "l" end
 
 function ircDialog()
-	local res, server, port, nick, partner, forceSend, dashmode, hpshare, ammoshare  = iup.GetParam("Connection settings", nil,
+	local res, server, port, nick, partner, forceSend, overlay, dashmode, hpshare, ammoshare  = iup.GetParam("Connection settings", nil,
 	    "Enter an IRC server: %s\n" ..
 		"IRC server port: %i\n" ..
 		"%t\n" .. 
@@ -15,14 +15,15 @@ function ircDialog()
 		"%t\n" .. -- <hr>
 		"[NYI]Are you restarting\rafter a crash? %b\n" ..
 		"Options%t\n" ..
+		"Show Overlay? %b\n" ..
 		"Dash mode? %b\n" ..
 		"[NYI]Current Health share? %b\n" ..
 		"[NYI]Ammo share? %b\n"		
-		,"irc.speedrunslive.com", 6667, "", "", 0,0,0,0)
+		,"irc.speedrunslive.com", 6667, "", "", 0,0,0,0,0)
 
 	if 0 == res then return nil end
 
-	return {server=server, port=port, nick=nick:lower(), partner=partner:lower(), forceSend=forceSend==1, hpshare=hpshare==1, ammoshare=ammoshare==1, dashmode=dashmode==1 }
+	return {server=server, port=port, nick=nick:lower(), partner=partner:lower(), forceSend=forceSend==1, hpshare=hpshare==1, ammoshare=ammoshare==1, dashmode=dashmode==1, overlay=overlay==1 }
 end
 
 function selectDialog(specs, reason)

@@ -357,7 +357,10 @@ function GameDriver:checkFirstRunning() -- Do first-frame bootup-- only call if 
 end
 
 function GameDriver:childTick()
-	DrawGUIOverlay()
+	if opts.overlay then
+		DrawGUIOverlay()
+	end
+	
 	if opts.dashmode and memory.readbyte(0x7E1F99) == 0 then 
 		memory.writebyte(0x7E1F99, 0x8)
 	end
