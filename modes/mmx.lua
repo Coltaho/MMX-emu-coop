@@ -72,6 +72,8 @@ return {
 							return true
 						end
 					end}, --Let partner know where you be at using the current stage value
+		[0x7E1F7C] = {kind="high"}, --Sigma 1 zero intro value
+		[0x7E1F7D] = {kind="high"}, --Sigma 1 vile/zero dead value
 		[0x7E1F7E] = {kind=function(value, previousValue, receiving)
 						if value >= 128 and receiving then
 							message("Partner got Hadouken!")
