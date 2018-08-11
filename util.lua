@@ -154,7 +154,7 @@ function DrawGUIOverlay()
 	for i = 1, 8 do
 		if weapons[myweapons[i]] then
 			drawIcon(weaponIcons[i], i*16, 207)
-			if weapons.count ~= 8 then weapons.count = weapons.count + 1
+			if weapons.count ~= 8 then weapons.count = weapons.count + 1 end
 		else
 			drawIcon(weaponuIcons[i], i*16, 207)
 		end
