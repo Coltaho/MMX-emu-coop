@@ -22,18 +22,21 @@ return {
 		[0x7E1F7B] = {kind=function(value, previousValue, receiving)
 						allow = false
 						if value > 0 and value < 4 and value > previousValue and receiving then
-							--message("Partner got to Sigma " .. value)
+							message("Partner beat Sigma Stage " .. value)
 							allow = true
 						elseif value == 4 and value > previousValue and receiving then
-							--message("Partner finished the game!")
-						elseif value <= 4 and value > previousValue then
+							message("Partner finished the game!")
+						elseif value > previousValue then
 							allow = true
 						end
-						if allow then locations.sigma = value end
+						if allow then 
+							locations.sigma = value 
+						end
 						return allow, value
 					end}, --Unlocked Sigma Stage
 		--[0x7E0BCF] = {kind="MMXHealthShare", stype="uInstantRefill"}, -- Health
 		[0x7E1F7A] = {kind=function(value, previousValue, receiving)
+						if value == previousValue then return false end
 						if value == 0x0 and memory.readbyte(0x7E1F9B) == 4 then
 							--Intro is done but the game said our stage is the intro. WHAT? Ignore it...
 							return false
