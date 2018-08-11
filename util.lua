@@ -24,7 +24,8 @@ weapons = {
 	storm = false,
 	spark = false,
 	cutter = false,
-	ice = false
+	ice = false,
+	count = 0
 }
 
 myhearts = {
@@ -120,6 +121,7 @@ local sigmaIcons = {
 						pngImage("./images/two.png", nil, false, false),
 						pngImage("./images/three.png", nil, false, false),
 						pngImage("./images/four.png", nil, false, false)
+						pngImage("./images/five.png", nil, false, false)
 					}
 	
 local etankIcon = pngImage("./images/etank.png", nil, false, false)
@@ -148,31 +150,38 @@ local frameCounter = 0
 
 function DrawGUIOverlay()
 	--Draw weapons
+	if weapons.count ~= 8 then weapons.count = 0 end
 	for i = 1, 8 do
 		if weapons[myweapons[i]] then
 			drawIcon(weaponIcons[i], i*16, 207)
+			if weapons.count ~= 8 then weapons.count = weapons.count + 1
 		else
 			drawIcon(weaponuIcons[i], i*16, 207)
 		end
 	end
     
-	--Draw hearts  
-	for i = 1, 8 do
-		if hearts[myhearts[i]] then
-			drawIcon(heartIcon, i * 16, 199, "#000000")
+	--If we have hado, stop drawing hearts/subtanks
+	if not upgrades.hado then
+		--Draw hearts  
+		for i = 1, 8 do
+			if hearts[myhearts[i]] then
+				drawIcon(heartIcon, i * 16, 199, "#000000")
+			end
 		end
-	end
-	
-	--Draw subtanks
-	for i = 1, 4 do
-		if tanks[mytanks[i]] then
-			drawIcon(etankIcon, ((i + 2) * 16) + 8, 199, "#000000")
+		
+		--Draw subtanks
+		for i = 1, 4 do
+			if tanks[mytanks[i]] then
+				drawIcon(etankIcon, ((i + 2) * 16) + 8, 199, "#000000")
+			end
 		end
 	end
 	
 	--Draw Current Sigma
-	if locations.sigma > 0 then
-		drawIcon(sigmaIcons[locations.sigma], 146, 207)
+	if weapons.count == 8 and locations.sigma == 0 then 
+		drawIcon(sigmaIcons[locations.sigma + 1], 146, 207)
+	else
+		drawIcon(sigmaIcons[locations.sigma + 1], 146, 207)
 	end
 	
 	--Draw Current Upgrades
