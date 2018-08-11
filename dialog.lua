@@ -8,6 +8,8 @@ function ircDialog()
 	local res, server, port, nick, partner, forceSend, dashmode, hpshare, ammoshare  = iup.GetParam("Connection settings", nil,
 	    "Enter an IRC server: %s\n" ..
 		"IRC server port: %i\n" ..
+		"Do NOT use actual SRL nick!" ..
+		"Pick something else" ..
 		"Your nick: %s\n" ..
 		"Partner nick: %s\n" ..
 		"%t\n" .. -- <hr>
