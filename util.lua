@@ -120,7 +120,7 @@ local sigmaIcons = {
 						pngImage("./images/one.png", nil, false, false),
 						pngImage("./images/two.png", nil, false, false),
 						pngImage("./images/three.png", nil, false, false),
-						pngImage("./images/four.png", nil, false, false)
+						pngImage("./images/four.png", nil, false, false),
 						pngImage("./images/five.png", nil, false, false)
 					}
 	
