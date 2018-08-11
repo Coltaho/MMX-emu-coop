@@ -154,11 +154,6 @@ function DrawGUIOverlay()
 			drawIcon(weaponuIcons[i], i*16, 208)
 		end
 	end
-	
-	--Draw partner location
-	if locations.partnerlocation > 0 and locations.partnerlocation < 10 then
-		drawIcon(oneupIcon, locations.partnerlocation * 16, 216, "#000000")
-	end
     
 	--Draw hearts  
 	for i = 1, 8 do
@@ -198,6 +193,11 @@ function DrawGUIOverlay()
 	selectedWeapon = memory.readbyte(0x7E0BDB) / 2
 	if selectedWeapon ~= 0 then
 		gui.box(selectedWeapon * 16 + 1, 208, (selectedWeapon * 16) + 16, 223, "#FFFFFF00", "#FFFF00FF")
+	end
+	
+	--Draw partner location
+	if locations.partnerlocation > 0 and locations.partnerlocation < 10 then
+		drawIcon(oneupIcon, locations.partnerlocation * 16, 216, "#000000")
 	end
 	
 end
