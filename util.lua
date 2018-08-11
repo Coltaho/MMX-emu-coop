@@ -84,8 +84,6 @@ locations = {
 	partnerlocation = 0
 }
 
-selectedWeapon = 0
-
 -- UTILITIES
 
 function nonempty(s) return s and s ~= "" end
@@ -144,53 +142,60 @@ local upgradeuIcons = {
 						pngImage("./images/bodyu.png", nil, false, false),
 						pngImage("./images/armu.png", nil, false, false)
 					}
+					
+local selectedWeapon = 0
+local frameCounter = 0
 
 function DrawGUIOverlay()
 	--Draw weapons
 	for i = 1, 8 do
 		if weapons[myweapons[i]] then
-			drawIcon(weaponIcons[i], i*16, 208)
+			drawIcon(weaponIcons[i], i*16, 207)
 		else
-			drawIcon(weaponuIcons[i], i*16, 208)
+			drawIcon(weaponuIcons[i], i*16, 207)
 		end
 	end
     
 	--Draw hearts  
 	for i = 1, 8 do
 		if hearts[myhearts[i]] then
-			drawIcon(heartIcon, i * 16, 200, "#000000")
+			drawIcon(heartIcon, i * 16, 199, "#000000")
 		end
 	end
 	
 	--Draw subtanks
 	for i = 1, 4 do
 		if tanks[mytanks[i]] then
-			drawIcon(etankIcon, ((i + 2) * 16) + 8, 200, "#000000")
+			drawIcon(etankIcon, ((i + 2) * 16) + 8, 199, "#000000")
 		end
 	end
 	
 	--Draw Current Sigma
 	if locations.sigma > 0 then
-		drawIcon(sigmaIcons[locations.sigma], 146, 208)
+		drawIcon(sigmaIcons[locations.sigma], 146, 207)
 	end
 	
 	--Draw Current Upgrades
 	for i = 1, 4 do
 		if upgrades[myupgrades[i]] then
-			drawIcon(upgradeIcons[i], 148 + (i * 16), 208)
+			drawIcon(upgradeIcons[i], 148 + (i * 16), 207)
 		else
-			drawIcon(upgradeuIcons[i], 148 + (i * 16), 208)
+			drawIcon(upgradeuIcons[i], 148 + (i * 16), 207)
 		end
 	end
 	
 	--Draw Hado upgrade over helmet if we have it
 	if upgrades[myupgrades[5]] then
-		drawIcon(upgradeIcons[5], 180, 208)
+		drawIcon(upgradeIcons[5], 180, 207)
 	end
 	
 	--Reads selected weapon every frame (multiple of 2 so divided by to for 1 - 8)
 	--Then draws a box around the icons
-	selectedWeapon = memory.readbyte(0x7E0BDB) / 2
+	if frameCounter >= 10 then
+		selectedWeapon = memory.readbyte(0x7E0BDB) / 2
+		frameCounter = 0
+	end
+	
 	if selectedWeapon ~= 0 then
 		gui.box(selectedWeapon * 16 + 1, 208, (selectedWeapon * 16) + 16, 223, "#FFFFFF00", "#FFFF00FF")
 	end
@@ -200,6 +205,7 @@ function DrawGUIOverlay()
 		drawIcon(oneupIcon, locations.partnerlocation * 16, 216, "#000000")
 	end
 	
+	frameCounter = frameCounter + 1
 end
    
    function drawIcon(icon, offx, offy, transparent)
