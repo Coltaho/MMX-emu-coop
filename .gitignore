@@ -6,3 +6,7 @@ snes9x.conf
 *.000
 *.001
 *.conf
+*.srm
+*.oops
+*.003
+*.002

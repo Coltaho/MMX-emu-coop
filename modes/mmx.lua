@@ -7,7 +7,8 @@
 -- Data source: http://tasvideos.org/GameResources/SNES/MegaManX/RAMMap.html
 -- This file is available under Creative Commons CC0
 
-local fullAmmo = 0x5C
+local otherfullAmmo = 0x5C
+local fullAmmo = 0xDC
 
 return {
 	guid = "048ef982-791a-4e13-b2ae-0093e9e5d791",
@@ -134,7 +135,7 @@ return {
 							allow=true
 							weapons.homing = true
 						end
-						return allow, fullAmmo
+						return allow, otherfullAmmo
 					end},
 		[0x7E1F8A] = {verb="killed", name="Chameleon (got C. Sting)", kind=function(value, previousValue)
 						allow=false
@@ -150,7 +151,7 @@ return {
 							allow=true
 							weapons.shield = true
 						end
-						return allow, fullAmmo
+						return allow, otherfullAmmo
 					end},
 		[0x7E1F8E] = {verb="killed", name="Mammoth (got Fire W.)", kind=function(value, previousValue)
 						allow=false
