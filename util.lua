@@ -187,7 +187,7 @@ function DrawGUIOverlay()
 	--Draw Current Sigma
 	if weaponCount == 8 and locations.sigma == 0 then 
 		drawIcon(sigmaIcons[locations.sigma + 1], 146, 207)
-	else
+	else if locations.sigma > 0 then
 		drawIcon(sigmaIcons[locations.sigma + 1], 146, 207)
 	end
 	
