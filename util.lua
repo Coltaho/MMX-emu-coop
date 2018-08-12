@@ -28,8 +28,7 @@ weapons = {
 	storm = false,
 	spark = false,
 	cutter = false,
-	ice = false,
-	count = 0
+	ice = false
 }
 
 myhearts = {
@@ -51,7 +50,8 @@ hearts = {
 	eagle = false,
 	mandrill = false,
 	kuwanger = false,
-	penguin = false	
+	penguin = false,
+	maxlife = 16
 }
 
 mytanks = {
@@ -224,8 +224,8 @@ function DrawGUIOverlay()
 	
 	if opts.hpshare then
 		xhp = memory.readbyte(0x7E0BCF)
-		if xhp > 32 then
-			xhp = 32
+		if xhp > hearts.maxlife then
+			xhp = hearts.maxlife
 		end
 		
 		--need more here to resize \ use different image based on heart count

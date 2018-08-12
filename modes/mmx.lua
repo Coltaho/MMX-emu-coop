@@ -130,7 +130,13 @@ return {
 						end
 						return allow, value
 					end}, --Sub Tank
-		[0x7E1F9A] = {kind="high"}, --Max health
+		[0x7E1F9A] = {kind=function(value, previousValue)
+						allow=false
+						if value > previousValue then
+							hearts.maxlife = value
+						end
+						return allow, value
+					end}, --Max health
 		[0x7E1F9B] = {kind="high"}, --Intro Done
 		[0x7E1F99] = {nameBitmap={"Head (Butt) Upgrade", "Arm (Buster) Upgrade", "Body (Armor) Upgrade", "Boots (Dash) Upgrade", "Eagle Sub-tank", "Armadillo Sub-tank", "Mandrill Sub-tank", "Mammoth Sub-tank"}, kind="bitOr"},		--Upgrade and subtank bitflag
 		[0x7E1F9C] = {nameBitmap={"Penguin Heart", "Armadillo Heart", "Eagle Heart", "Chameleon Heart", "Mammoth Heart", "Kuwanger Heart", "Mandrill Heart", "Octopus Heart"}, kind="bitOr"}, --Heart Container bitflag
