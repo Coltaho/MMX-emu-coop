@@ -6,7 +6,7 @@ opts = {
 }
 
 uiopts = {
-	overlay = false
+	overlay = true
 }
 
 myweapons = {
@@ -155,9 +155,11 @@ local xhp = 0
 
 local soulLink = {
 					dash = pngImage("./images/hpdash.png", nil, false, false),
-					background = pngImage("./images/hpbackground.png", nil, false, false)
+					background = pngImage("./images/hpbackground.png", nil, false, false),
+					sigmasmirk = pngImage("./images/sigmasmirk.png", pixelRowtoHex, false, true)
 				  }
 function DrawGUIOverlay()
+	drawIcon(soulLink["sigmasmirk"], 70, 60, "#000000")
 	--Draw weapons
 	local weaponCount = 0
 	
@@ -223,10 +225,16 @@ function DrawGUIOverlay()
 	end
 	
 	if opts.hpshare then
+		
 		xhp = memory.readbyte(0x7E0BCF)
 		if xhp > hearts.maxlife then
 			xhp = hearts.maxlife
 		end
+		
+		if xhp == 0 then
+			--drawIcon(soulLink["sigmasmirk"], 50, 50, "#FFFFFF")
+		end
+		
 		
 		--need more here to resize \ use different image based on heart count
 		drawIcon(soulLink["background"], 8, 11, "#FF0000")
@@ -356,7 +364,7 @@ function printMessage()
 		end
 	end
 	if msg then
-		--DrawGUIOverlay()
+		DrawGUIOverlay()
 		gui.text(5, 2, msg) --254-40
 	end
 end
