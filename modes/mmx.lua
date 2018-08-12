@@ -134,6 +134,7 @@ return {
 						allow=false
 						if value > previousValue then
 							hearts.maxlife = value
+							allow = true
 						end
 						return allow, value
 					end}, --Max health
