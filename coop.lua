@@ -72,11 +72,14 @@ if emu.emulating() then
 
 				statusMessage("Connecting to server...")
 
+				--Game modes
 				opts.hpshare = data.hpshare
 				opts.ammoshare = data.ammoshare
 				opts.dashmode = data.dashmode
-				opts.overlay = data.overlay
 				upgrades.boots = data.dashmode
+				
+				--UI Options
+				uiopts.overlay = data.overlay				
 				
 				mainDriver = GameDriver(spec, data.forceSend) -- Notice: This is a global, specs can use it
 				IrcPipe(data, mainDriver):wake(server)

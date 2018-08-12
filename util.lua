@@ -2,7 +2,10 @@
 opts = {
 	hpshare = false,
 	ammoshare = false,
-	dashmode = false,
+	dashmode = false
+}
+
+uiopts = {
 	overlay = false
 }
 

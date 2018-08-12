@@ -357,7 +357,7 @@ function GameDriver:checkFirstRunning() -- Do first-frame bootup-- only call if 
 end
 
 function GameDriver:childTick()
-	if opts.overlay then
+	if uiopts.overlay then
 		DrawGUIOverlay()
 	end
 	

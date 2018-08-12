@@ -5,7 +5,7 @@ local optionLetter = "o"
 if FCEU then optionLetter = "l" end
 
 function ircDialog()
-	local res, server, port, nick, partner, forceSend, overlay, dashmode, hpshare, ammoshare  = iup.GetParam("Connection settings", nil,
+	local res, server, port, nick, partner, forceSend, dashmode, hpshare, ammoshare, overlay  = iup.GetParam("Connection settings", nil,
 	    "Enter an IRC server: %s\n" ..
 		"IRC server port: %i\n" ..
 		"%t\n" .. 
@@ -14,11 +14,12 @@ function ircDialog()
 		"Partner nick: %s\n" ..
 		"%t\n" .. -- <hr>
 		"[NYI]Are you restarting\rafter a crash? %b\n" ..
-		"Options%t\n" ..
-		"Show Overlay? %b\n" ..
-		"Dash mode? %b\n" ..
-		"[NYI]Current Health share? %b\n" ..
-		"[NYI]Ammo share? %b\n"		
+		"Game Modes (MUST Match Partner)%t\n" ..
+		"Dash mode? %b[No,Yes]\n" ..
+		"[Beta]Current Health share? %b[No,Yes]\n" ..
+		"[NYI]Ammo share? %b[No,Yes]\n" ..
+		"Individual Options%t\n" .. 
+		"Show Overlay? %b[No,Yes]\n"
 		,"irc.speedrunslive.com", 6667, "", "", 0,0,0,0,0)
 
 	if 0 == res then return nil end
