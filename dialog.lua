@@ -20,7 +20,7 @@ function ircDialog()
 		"[NYI]Ammo share? %b[No,Yes]\n" ..
 		"Individual Options%t\n" .. 
 		"Show Overlay? %b[No,Yes]\n"
-		,"irc.speedrunslive.com", 6667, "", "", 0,0,0,0,0)
+		,"irc.speedrunslive.com", 6667, "", "", 0,0,0,0,1)
 
 	if 0 == res then return nil end
 
