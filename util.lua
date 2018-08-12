@@ -95,62 +95,62 @@ pngImage = require("png")
 
 --Collected weapon icons
 local weaponIcons = {
-						pngImage("./images/homing.png", nil, false, false),
-						pngImage("./images/sting.png", nil, false, false),
-						pngImage("./images/shield.png", nil, false, false),
-						pngImage("./images/fire.png", nil, false, false),
-						pngImage("./images/storm.png", nil, false, false),	
-						pngImage("./images/spark.png", nil, false, false),
-						pngImage("./images/cutter.png", nil, false, false),
-						pngImage("./images/ice.png", nil, false, false)
+						pngImage("./images/homing.png", pixelRowtoHex, false, true),
+						pngImage("./images/sting.png", pixelRowtoHex, false, true),
+						pngImage("./images/shield.png", pixelRowtoHex, false, true),
+						pngImage("./images/fire.png", pixelRowtoHex, false, true),
+						pngImage("./images/storm.png", pixelRowtoHex, false, true),	
+						pngImage("./images/spark.png", pixelRowtoHex, false, true),
+						pngImage("./images/cutter.png", pixelRowtoHex, false, true),
+						pngImage("./images/ice.png", pixelRowtoHex, false, true)
 					}
 --Greyed out weapon icons
 local weaponuIcons = {
-						pngImage("./images/homingu.png", nil, false, false),
-						pngImage("./images/stingu.png", nil, false, false),
-						pngImage("./images/shieldu.png", nil, false, false),
-						pngImage("./images/fireu.png", nil, false, false),
-						pngImage("./images/stormu.png", nil, false, false),	
-						pngImage("./images/sparku.png", nil, false, false),
-						pngImage("./images/cutteru.png", nil, false, false),
-						pngImage("./images/iceu.png", nil, false, false)
+						pngImage("./images/homingu.png", pixelRowtoHex, false, true),
+						pngImage("./images/stingu.png", pixelRowtoHex, false, true),
+						pngImage("./images/shieldu.png", pixelRowtoHex, false, true),
+						pngImage("./images/fireu.png", pixelRowtoHex, false, true),
+						pngImage("./images/stormu.png", pixelRowtoHex, false, true),	
+						pngImage("./images/sparku.png", pixelRowtoHex, false, true),
+						pngImage("./images/cutteru.png", pixelRowtoHex, false, true),
+						pngImage("./images/iceu.png", pixelRowtoHex, false, true)
 					}
 				
 			
 local sigmaIcons = {
-						pngImage("./images/one.png", nil, false, false),
-						pngImage("./images/two.png", nil, false, false),
-						pngImage("./images/three.png", nil, false, false),
-						pngImage("./images/four.png", nil, false, false),
-						pngImage("./images/five.png", nil, false, false)
+						pngImage("./images/one.png", pixelRowtoHex, false, true),
+						pngImage("./images/two.png", pixelRowtoHex, false, true),
+						pngImage("./images/three.png", pixelRowtoHex, false, true),
+						pngImage("./images/four.png", pixelRowtoHex, false, true),
+						pngImage("./images/five.png", pixelRowtoHex, false, true)
 					}
 	
-local etankIcon = pngImage("./images/etank.png", nil, false, false)
-local heartIcon = pngImage("./images/heart.png", nil, false, false)
-local heartuIcon = pngImage("./images/heartu.png", nil, false, false)
-local oneupIcon = pngImage("./images/oneup.png", nil, false, false)
+local etankIcon = pngImage("./images/etank.png", pixelRowtoHex, false, true)
+local heartIcon = pngImage("./images/heart.png", pixelRowtoHex, false, true)
+local heartuIcon = pngImage("./images/heartu.png", pixelRowtoHex, false, true)
+local oneupIcon = pngImage("./images/oneup.png", pixelRowtoHex, false, true)
 
 
 local upgradeIcons = {
-						pngImage("./images/boots.png", nil, false, false),
-						pngImage("./images/helmet.png", nil, false, false),
-						pngImage("./images/body.png", nil, false, false),
-						pngImage("./images/arm.png", nil, false, false),
-						pngImage("./images/hado.png", nil, false, false)
+						pngImage("./images/boots.png", pixelRowtoHex, false, true),
+						pngImage("./images/helmet.png", pixelRowtoHex, false, true),
+						pngImage("./images/body.png", pixelRowtoHex, false, true),
+						pngImage("./images/arm.png", pixelRowtoHex, false, true),
+						pngImage("./images/hado.png", pixelRowtoHex, false, true)
 					}
 					
 local upgradeuIcons = {
-						pngImage("./images/bootsu.png", nil, false, false),
-						pngImage("./images/helmetu.png", nil, false, false),
-						pngImage("./images/bodyu.png", nil, false, false),
-						pngImage("./images/armu.png", nil, false, false)
+						pngImage("./images/bootsu.png", pixelRowtoHex, false, true),
+						pngImage("./images/helmetu.png", pixelRowtoHex, false, true),
+						pngImage("./images/bodyu.png", pixelRowtoHex, false, true),
+						pngImage("./images/armu.png", pixelRowtoHex, false, true)
 					}
 					
 local selectedWeapon = 0
 local frameCounter = 0
 local xhp = 0
 
-local soulSplit = {
+local soulLink = {
 					dash = pngImage("./images/hpdash.png", nil, false, false),
 					background = pngImage("./images/hpbackground.png", nil, false, false)
 				  }
@@ -187,7 +187,7 @@ function DrawGUIOverlay()
 	--Draw Current Sigma
 	if weaponCount == 8 and locations.sigma == 0 then 
 		drawIcon(sigmaIcons[locations.sigma + 1], 146, 207)
-	else if locations.sigma > 0 then
+	elseif locations.sigma > 0 then
 		drawIcon(sigmaIcons[locations.sigma + 1], 146, 207)
 	end
 	
@@ -209,12 +209,7 @@ function DrawGUIOverlay()
 	--Then draws a box around the icons
 	
 	
-	if frameCounter >= 10 then
-		selectedWeapon = memory.readbyte(0x7E0BDB) / 2
-		xhp = memory.readbyte(0x7E0BCF)
-		frameCounter = 0
-	end
-	
+	selectedWeapon = memory.readbyte(0x7E0BDB) / 2
 	if selectedWeapon ~= 0 then
 		gui.box(selectedWeapon * 16 + 1, 208, (selectedWeapon * 16) + 16, 223, "#FFFFFF00", "#FFFF00FF")
 	end
@@ -225,9 +220,15 @@ function DrawGUIOverlay()
 	end
 	
 	if opts.hpshare then
-		drawIcon(soulSplit["background"], 9, 12, "#FF0000")
+		xhp = memory.readbyte(0x7E0BCF)
+		if xhp > 32 then
+			xhp = 32
+		end
+		
+		--need more here to resize \ use different image based on heart count
+		drawIcon(soulLink["background"], 8, 11, "#FF0000")
 		for i = 1, xhp do
-			drawIcon(soulSplit["dash"], 13, 79 - (i * 2), "#FF0000")
+			drawIcon(soulLink["dash"], 12, 79 - (i * 2), "#FF0000")
 		end
 	end
 	
@@ -235,69 +236,23 @@ function DrawGUIOverlay()
 	
 	frameCounter = frameCounter + 1
 end
-   
-   function drawIcon(icon, offx, offy, transparent)
+
+function drawIcon(icon, offx, offy, transparent)
    for h = 1, icon.height do
 		for w = 1, icon.width do
-			local hexadecimal = '#'
-			r = rgbToHex(icon.pixels[h][w].R)
-			g = rgbToHex(icon.pixels[h][w].G)
-			b = rgbToHex(icon.pixels[h][w].B)
-			a = rgbToHex(icon.pixels[h][w].A)
-			
-			hexadecimal = hexadecimal .. r .. g .. b
+
 
 			if transparent ~= nil then
-				if transparent ~= hexadecimal then
-					gui.pixel(w + offx, h + offy, hexadecimal)
+				if transparent ~= icon.pixels[h][w] then
+					gui.pixel(w + offx, h + offy, icon.pixels[h][w])
 				end
 			else
-				gui.pixel(w + offx, h + offy, hexadecimal)
+				gui.pixel(w + offx, h + offy, icon.pixels[h][w])
 			end
 		end
 	end
 end
 
-function rgbToHex(value)
-	
-		local hex = ''
-
-		while(value > 0)do
-			local index = math.fmod(value, 16) + 1
-			value = math.floor(value / 16)
-			hex = string.sub('0123456789ABCDEF', index, index) .. hex			
-		end
-
-		if(string.len(hex) == 0)then
-			hex = '00'
-
-		elseif(string.len(hex) == 1)then
-			hex = '0' .. hex
-		end
-
-	return hex
-end
-  
-  
-function rgbToHex(value)
-	
-		local hex = ''
-
-		while(value > 0)do
-			local index = math.fmod(value, 16) + 1
-			value = math.floor(value / 16)
-			hex = string.sub('0123456789ABCDEF', index, index) .. hex			
-		end
-
-		if(string.len(hex) == 0)then
-			hex = '00'
-
-		elseif(string.len(hex) == 1)then
-			hex = '0' .. hex
-		end
-
-	return hex
-end
 
 -- TICKER
 

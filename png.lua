@@ -250,6 +250,40 @@ local function getPixelRow(stream, depth, colorType, palette, length)
     return pixelRow
 end
 
+function pixelRowtoHex(i, height, width, pixelRow)
+local hexvalues = {}
+
+		for w = 1, width do
+			local hexadecimal = '#'
+			r = rgbToHex(pixelRow[w].R)
+			g = rgbToHex(pixelRow[w].G)
+			b = rgbToHex(pixelRow[w].B)
+			hexadecimal = hexadecimal .. r .. g .. b
+			hexvalues[w] = hexadecimal
+		end
+
+return hexvalues
+end
+
+function rgbToHex(value)
+	
+		local hex = ''
+
+		while(value > 0)do
+			local index = math.fmod(value, 16) + 1
+			value = math.floor(value / 16)
+			hex = string.sub('0123456789ABCDEF', index, index) .. hex			
+		end
+
+		if(string.len(hex) == 0)then
+			hex = '00'
+
+		elseif(string.len(hex) == 1)then
+			hex = '0' .. hex
+		end
+
+	return hex
+end
 
 local function pngImage(path, progCallback, verbose, memSave)
     local stream = io.open(path, "rb")
@@ -300,8 +334,8 @@ local function pngImage(path, progCallback, verbose, memSave)
     printV("Creating pixelmap...")
     for i = 1, height do
         local pixelRow = getPixelRow(StringStream, depth, colorType, chunkData.PLTE, width)
-        if progCallback ~= nil then 
-            progCallback(i, height, pixelRow)
+        if progCallback ~= nil then
+            pixels[i] = progCallback(i, height, width, pixelRow)
         end
         if not memSave then
             pixels[i] = pixelRow
