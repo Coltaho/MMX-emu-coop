@@ -158,8 +158,25 @@ local soulLink = {
 					background = pngImage("./images/hpbackground.png", nil, false, false),
 					sigmasmirk = pngImage("./images/sigmasmirk.png", pixelRowtoHex, false, true)
 				  }
+				  
+local sigmaanimation = {
+					pngImage("./images/sigmasmirk1.png", pixelRowtoHex, false, true),
+					pngImage("./images/sigmasmirk2.png", pixelRowtoHex, false, true),
+					pngImage("./images/sigmasmirk3.png", pixelRowtoHex, false, true)
+}
+
 function DrawGUIOverlay()
-	drawIcon(soulLink["sigmasmirk"], 70, 60, "#000000")
+	if frameCounter < 10 then
+		drawIcon(sigmaanimation[1], 70, 60, "#000000")
+	elseif frameCounter <= 20 then
+		drawIcon(sigmaanimation[2], 70, 60, "#000000")
+	elseif frameCounter <= 30 then
+		drawIcon(sigmaanimation[3], 70, 60, "#000000")
+	end
+	if frameCounter == 30 then
+		frameCounter = 0
+	end
+	
 	--Draw weapons
 	local weaponCount = 0
 	
