@@ -150,7 +150,6 @@ local upgradeuIcons = {
 					}
 					
 local selectedWeapon = 0
-local frameCounter = 0
 local xhp = 0
 
 local soulLink = {
@@ -160,22 +159,22 @@ local soulLink = {
 				  }
 				  
 local sigmaanimation = {
-					pngImage("./images/sigmasmirk1.png", pixelRowtoHex, false, true),
-					pngImage("./images/sigmasmirk2.png", pixelRowtoHex, false, true),
-					pngImage("./images/sigmasmirk3.png", pixelRowtoHex, false, true)
+					"./images/sigmasmirk1.png",
+					"./images/sigmasmirk2.png",
+					"./images/sigmasmirk3.png"
 }
 
+local animated = animatedImage(sigmaanimation, 3, 4)
+
+local animatedtwo = animatedImage(sigmaanimation, 3, 0.5)
+
+
+
+
 function DrawGUIOverlay()
-	if frameCounter < 10 then
-		drawIcon(sigmaanimation[1], 70, 60, "#000000")
-	elseif frameCounter <= 20 then
-		drawIcon(sigmaanimation[2], 70, 60, "#000000")
-	elseif frameCounter <= 30 then
-		drawIcon(sigmaanimation[3], 70, 60, "#000000")
-	end
-	if frameCounter == 30 then
-		frameCounter = 0
-	end
+
+animateIcon(animated, 30, 30, "#000000")
+animateIcon(animatedtwo, 100, 30, "#000000")
 	
 	--Draw weapons
 	local weaponCount = 0
@@ -260,10 +259,28 @@ function DrawGUIOverlay()
 		end
 	end
 	
-	
-	
-	frameCounter = frameCounter + 1
 end
+
+
+
+function animateIcon(icon, offx, offy, transparent)
+	
+	if icon.animationTimer >= icon.frameCount then
+		icon.index = icon.index + 1
+		if icon.index > icon.maxFrames then
+			icon.index = 1
+		end
+		
+		icon.animationTimer = 1
+	end
+	
+	
+	
+	
+	drawIcon(icon.images[icon.index], offx, offy, transparent)
+
+	icon.animationTimer = icon.animationTimer + 1
+end		
 
 function drawIcon(icon, offx, offy, transparent)
    for h = 1, icon.height do

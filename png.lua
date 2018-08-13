@@ -285,6 +285,34 @@ function rgbToHex(value)
 	return hex
 end
 
+
+function animatedImage(iconTable, totalFrames, speeds)
+	local images = {}
+	local index = 1
+	local speed = 1
+	local animationTimer = 0
+	local frameCount = 10
+	local maxFrames = totalFrames
+	if speeds ~= nil then
+		speed = speeds
+	end
+	
+	frameCount = (60 * speed) / totalFrames
+	
+	for i = 1, totalFrames do
+	images[i] = pngImage(iconTable[i], pixelRowtoHex, false, true)
+	end
+	
+	return {
+        images = images,
+		index = index,
+		speed = speed,
+		animationTimer = animationTimer,
+		frameCount = frameCount,
+		maxFrames = maxFrames
+    }
+end
+
 local function pngImage(path, progCallback, verbose, memSave)
     local stream = io.open(path, "rb")
     local chunkData
