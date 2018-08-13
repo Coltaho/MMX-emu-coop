@@ -29,9 +29,7 @@ return {
 						elseif value > previousValue then
 							allow = true
 						end
-						if allow then 
-							locations.sigma = value 
-						end
+						locations.sigma = value
 						return allow, value
 					end}, --Unlocked Sigma Stage
 		--[0x7E0BCF] = {kind="MMXHealthShare", stype="uInstantRefill"}, -- Health
