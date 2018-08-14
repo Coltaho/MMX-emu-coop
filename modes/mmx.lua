@@ -32,7 +32,19 @@ return {
 						locations.sigma = value
 						return allow, value
 					end}, --Unlocked Sigma Stage
-		--[0x7E0BCF] = {kind="MMXHealthShare", stype="uInstantRefill"}, -- Health
+		[0x7E0BCF] = {kind=function(value, previousValue, receiving)
+						allow = false
+						if (opts.hpshare) then
+							if value > 32 then
+								allow = false
+							elseif receiving and value == 0 then
+								soulLink.dying = true
+							else
+								allow = true
+							end
+						end
+						return allow, value
+					end}, -- Current Health
 		[0x7E1F7A] = {kind=function(value, previousValue, receiving)
 						if value == previousValue then return false end
 						if value == 0x0 and memory.readbyte(0x7E1F9B) == 4 then
