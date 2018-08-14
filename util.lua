@@ -152,7 +152,7 @@ local upgradeuIcons = {
 local selectedWeapon = 0
 local xhp = 0
 
-local soulLink = {
+soulLink = {
 					dash = pngImage("./images/hpdash.png", nil, false, false),
 					background = pngImage("./images/hpbackground.png", nil, false, false),
 					dying = false
