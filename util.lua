@@ -155,7 +155,7 @@ local xhp = 0
 local soulLink = {
 					dash = pngImage("./images/hpdash.png", nil, false, false),
 					background = pngImage("./images/hpbackground.png", nil, false, false),
-					sigmasmirk = pngImage("./images/sigmasmirk.png", pixelRowtoHex, false, true)
+					dying = false
 				  }
 				  
 local sigmaanimation = {
@@ -164,18 +164,19 @@ local sigmaanimation = {
 					"./images/sigmasmirk3.png"
 }
 
-local animated = animatedImage(sigmaanimation, 3, 4)
+local animated = animatedImage(sigmaanimation, 3, 0.5)
 
-local animatedtwo = animatedImage(sigmaanimation, 3, 0.5)
+local bytetable = {
+0x00, 0x02, 0x02, 0x02, 0x071, 0xD1, 0x0E, 0x00, 0x78, 0x01, 0x15, 0x00, 0x10, 0xFB, 0x81, 0x00, 0x00, 0x29, 0x04, 0x04, 0xC9, 0xB3, 0x22, 0x8C, 0x60, 0x00, 0x86, 0xFE, 0x00, 0xFC, 0x00, 0x03, 0x2E, 0xCA, 0xD1, 0x0E, 0x78, 0x01, 0x02, 0x02, 0x03, 0x00, 0x13, 0x04, 0x00, 0x05, 0x06, 0xFF, 0x00, 0x00, 0x00, 0x08, 0x00, 0x01, 0x80, 0x01, 0x02, 0x02, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
+}
 
-
+local fade = 0xF
+local framecounter = 0
+local startedDeath = false
 
 
 function DrawGUIOverlay()
 
-animateIcon(animated, 30, 30, "#000000")
-animateIcon(animatedtwo, 100, 30, "#000000")
-	
 	--Draw weapons
 	local weaponCount = 0
 	
@@ -247,10 +248,9 @@ animateIcon(animatedtwo, 100, 30, "#000000")
 			xhp = hearts.maxlife
 		end
 		
-		if xhp == 0 then
-			--drawIcon(soulLink["sigmasmirk"], 50, 50, "#FFFFFF")
-		end
-		
+		if soulLink.dying == true then
+			SoulLinkDeath()
+		end		
 		
 		--need more here to resize \ use different image based on heart count
 		drawIcon(soulLink["background"], 8, 11, "#FF0000")
@@ -298,6 +298,63 @@ function drawIcon(icon, offx, offy, transparent)
 	end
 end
 
+function SoulLinkDeath()
+	--print("State: " .. memory.readbyte(0x7E0C32))
+	--memory.readbyte(0x7E1F13) --Turns to 1 if screen is frozen for doors/health etc
+	if not startedDeath and (memory.readbyte(0x7E0C32) == 8 or memory.readbyte(0x7E0C32) == 1 or memory.readbyte(0x7E0C32) == 2 or memory.readbyte(0x7E1F13) == 1) then --if we are in iframes, recovering
+		return --wait
+	elseif not startedDeath and memory.readbyte(0x7E0C32) == 128 --we are in a menu
+							and (memory.readbyte(0x7E0BCF) > 0 and memory.readbyte(0x7E0BCF) > 32) then --our life is valid meaning not stage select or already dead
+		return --wait
+	elseif not startedDeath and (memory.readbyte(0x7E0C32) ~= 0 or memory.readbyte(0x7E0BCF) == 0) then --if we are in anything other than normal state, or health is 0, cancel death
+		soulLink.dying = false
+		return
+	else --otherwise let's die!
+		startedDeath = true
+	end 
+	
+	animateIcon(animated, 80, 60, "#000000")
+	gui.text(60, 160, "Your soul linked partner has died!")
+	
+	if framecounter == 1 then
+		memory.writebyte(0x7E0C13, 0) --Sets iframe count to 0
+		memory.writebyte(0x7E125F, 0) --Sets c sting invuln count to 0
+	end
+	if framecounter < 15 then
+		fade = fade - 1
+		memory.writebyte(0x7E00B3, fade) --Writes current fade we want
+		
+		print("Iframe: " .. memory.readbyte(0x7E0C13) .. " State: " .. memory.readbyte(0x7E0C32))
+	elseif framecounter == 15 then
+		print("Killing X...")
+		
+		memory.writebyte(0x7E0BCF, 1) --Sets X's health
+		print("Iframe: " .. memory.readbyte(0x7E0C13) .. " State: " .. memory.readbyte(0x7E0C32))
+		playerposx = memory.readword(0x7E0BAD)
+		playerposy = memory.readword(0x7E0BB0)		
+		
+		for k = 1, 64 do
+			memory.writebyte(0x7E0E68 + (k-1), bytetable[k])
+		end
+	
+		memory.writeword(0x7E0E68 + 0x5, playerposx)
+		memory.writeword(0x7E0E68 + 0x22, playerposx)
+		
+		memory.writeword(0x7E0E68 + 0x8, playerposy)
+		memory.writeword(0x7E0E68 + 0x24, playerposy)
+		
+		memory.writeword(0x7E0E68, 0x01) --Activates enemy
+	elseif framecounter == 210 then
+		framecounter = 0
+		fade = 0xF
+		memory.writebyte(0x7E00B3, fade) --Incase for some reason fade isn't lifted, let us see again
+		soulLink.dying = false
+		startedDeath = false
+		return
+	end
+	framecounter = framecounter + 1
+	
+end
 
 -- TICKER
 
