@@ -303,10 +303,10 @@ function SoulLinkDeath()
 	--memory.readbyte(0x7E1F13) --Turns to 1 if screen is frozen for doors/health etc
 	if not startedDeath and (memory.readbyte(0x7E0C32) == 8 or memory.readbyte(0x7E0C32) == 1 or memory.readbyte(0x7E0C32) == 2 or memory.readbyte(0x7E1F13) == 1) then --if we are in iframes, recovering
 		return --wait
-	elseif not startedDeath and memory.readbyte(0x7E0C32) == 128 --we are in a menu
+	elseif not startedDeath and memory.readbyte(0x7E1F10) == 6 --we are in the weapon select menu
 							and (memory.readbyte(0x7E0BCF) > 0 and memory.readbyte(0x7E0BCF) > 32) then --our life is valid meaning not stage select or already dead
 		return --wait
-	elseif not startedDeath and (memory.readbyte(0x7E0C32) ~= 0 or memory.readbyte(0x7E0BCF) == 0) then --if we are in anything other than normal state, or health is 0, cancel death
+	elseif not startedDeath and (memory.readbyte(0x7E1F11) ~= 2 or memory.readbyte(0x7E0BCF) == 0) then --if we are in anything other than normal state, or health is 0, cancel death
 		soulLink.dying = false
 		return
 	else --otherwise let's die!
