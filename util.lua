@@ -155,9 +155,9 @@ local xhp = 0
 soulLink = {
 					dash = pngImage("./images/hpdash.png", nil, false, false),
 					background = pngImage("./images/hpbackground.png", nil, false, false),
-					bottom = pngImage("./images/hpbackgroundbottom.png", nil, false, false),
-					top = pngImage("./images/hpbackgroundtop.png", nil, false, false),
-					middle = pngImage("./images/hpbackgroundmiddle.png", nil, false, false),
+					bottom = pngImage("./images/hpbackgroundbottom.png", pixelRowtoHex, false, true),
+					top = pngImage("./images/hpbackgroundtop.png", pixelRowtoHex, false, true),
+					middle = pngImage("./images/hpbackgroundmiddle.png", pixelRowtoHex, false, true),
 					dying = false
 				  }
 				  
@@ -258,7 +258,7 @@ function DrawGUIOverlay()
 		
 		local tanks = (hearts.maxlife - 16) / 2 
 		
-		print(tanks)
+		--print(tanks)
 		
 		
 		drawIcon(soulLink["bottom"], 8, 78, "#0000FF")

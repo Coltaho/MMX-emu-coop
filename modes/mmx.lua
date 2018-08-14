@@ -35,7 +35,7 @@ return {
 		[0x7E0BCF] = {kind=function(value, previousValue, receiving)
 						allow = false
 						if (opts.hpshare) then
-							if value > 32 then
+							if value > 32 or soulLink.dying == true then
 								allow = false
 							elseif receiving and value == 0 then
 								soulLink.dying = true
