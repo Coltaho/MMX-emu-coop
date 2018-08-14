@@ -39,7 +39,7 @@ return {
 								allow = false
 							elseif receiving and value == 0 then
 								soulLink.dying = true
-							elseif not receiving and memory.readbyte(0x7E1F11) ~= 2
+							elseif not receiving and memory.readbyte(0x7E1F11) ~= 2 then
 								allow = false
 							else
 								allow = true 
