@@ -361,9 +361,14 @@ function GameDriver:childTick()
 		DrawGUIOverlay()
 	end
 	
-	if opts.dashmode and memory.readbyte(0x7E1F99) == 0 then 
+	if opts.dashmode and memory.readbyte(0x7E1F99) == 0 then
 		memory.writebyte(0x7E1F99, 0x8)
 	end
+	
+	if opts.hpshare and memory.readbyte(0x7E1F7E) < 5 then
+		memory.writebyte(0x7E1F7E, 5)
+	end
+	
 	if self:isRunning(false) then
 		self:checkFirstRunning()
 
