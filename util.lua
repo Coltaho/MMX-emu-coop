@@ -258,11 +258,7 @@ function DrawGUIOverlay()
 		
 		local tanks = (hearts.maxlife - 16) / 2 
 		
-<<<<<<< HEAD
 		--print(tanks)
-		
-=======
->>>>>>> 06c4189382fea654cbfb08e15a0a2c201e80b303
 		
 		drawIcon(soulLink["bottom"], 8, 78, "#0000FF")
 		
