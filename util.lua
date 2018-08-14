@@ -158,7 +158,8 @@ soulLink = {
 					bottom = pngImage("./images/hpbackgroundbottom.png", pixelRowtoHex, false, true),
 					top = pngImage("./images/hpbackgroundtop.png", pixelRowtoHex, false, true),
 					middle = pngImage("./images/hpbackgroundmiddle.png", pixelRowtoHex, false, true),
-					dying = false
+					dying = false,
+					recentFrames = 0
 				  }
 				  
 local sigmaanimation = {
@@ -176,6 +177,8 @@ local bytetable = {
 local fade = 0xF
 local framecounter = 0
 local startedDeath = false
+local exitMenuPressStart = { start = true }
+local exitMenuPressRight = { right = true }
 
 
 function DrawGUIOverlay()
@@ -245,6 +248,8 @@ function DrawGUIOverlay()
 	end
 	
 	if opts.hpshare then
+		
+		soulLink.recentFrames = soulLink.recentFrames + 1
 		
 		xhp = memory.readbyte(0x7E0BCF)
 		if xhp > hearts.maxlife then
@@ -325,8 +330,18 @@ function SoulLinkDeath()
 	if not startedDeath and (memory.readbyte(0x7E0C32) == 8 or memory.readbyte(0x7E0C32) == 1 or memory.readbyte(0x7E0C32) == 2 or memory.readbyte(0x7E1F13) == 1) then --if we are in iframes, recovering
 		return --wait
 	elseif not startedDeath and memory.readbyte(0x7E1F10) == 6 then --we are in the weapon select menu
+		print("Getting you out of that menu, sorry")
+		soulLink.recentFrames = 0
+		if (soulLink.recentFrames % 2 == 0) then 
+			joypad.set(1, exitMenuPressStart)
+		else
+			joypad.set(1, exitMenuPressRight)
+		end
 		return --wait
-	elseif not startedDeath and (memory.readbyte(0x7E1F11) ~= 2 or memory.readbyte(0x7E0BCF) == 0) then --if we are in anything other than normal state, or health is 0, cancel death
+	elseif not startedDeath and memory.readbyte(0x7E1F11) ~= 2 and soulLink.recentFrames < 120 then --count 120 frames before cancelling death
+		return --wait
+	elseif not startedDeath and memory.readbyte(0x7E1F11) ~= 2 then --if we are in anything other than normal state, cancel death
+		print("State says you aren't in a stage, won't kill you: " .. memory.readbyte(0x7E1F11))
 		soulLink.dying = false
 		return
 	else --otherwise let's die!
@@ -343,13 +358,10 @@ function SoulLinkDeath()
 	if framecounter < 15 then
 		fade = fade - 1
 		memory.writebyte(0x7E00B3, fade) --Writes current fade we want
-		
-		print("Iframe: " .. memory.readbyte(0x7E0C13) .. " State: " .. memory.readbyte(0x7E0C32))
 	elseif framecounter == 15 then
 		print("Killing X...")
-		
 		memory.writebyte(0x7E0BCF, 1) --Sets X's health
-		print("Iframe: " .. memory.readbyte(0x7E0C13) .. " State: " .. memory.readbyte(0x7E0C32))
+		--print("Iframe: " .. memory.readbyte(0x7E0C13) .. " State: " .. memory.readbyte(0x7E0C32))
 		playerposx = memory.readword(0x7E0BAD)
 		playerposy = memory.readword(0x7E0BB0)		
 		
@@ -370,6 +382,7 @@ function SoulLinkDeath()
 		memory.writebyte(0x7E00B3, fade) --Incase for some reason fade isn't lifted, let us see again
 		soulLink.dying = false
 		startedDeath = false
+		soulLink.recentFrames = 0
 		return
 	end
 	framecounter = framecounter + 1

@@ -34,15 +34,22 @@ return {
 					end}, --Unlocked Sigma Stage
 		[0x7E0BCF] = {kind=function(value, previousValue, receiving)
 						allow = false
-						if (opts.hpshare) then
+						if (opts.hpshare and value ~= previousValue) then
 							if value > 32 or soulLink.dying == true then
 								allow = false
 							elseif receiving and value == 0 then
-								soulLink.dying = true
+								if soulLink.recentFrames > 400 then
+									soulLink.dying = true
+									print("We are gonna die!")
+								end
 							elseif not receiving and memory.readbyte(0x7E1F11) ~= 2 then
+								allow = false
+							elseif not receiving and memory.readbyte(0x7E1F11) == 2 and memory.readbyte(0x7E00B3) ~= 0xF then
+								--print("Screen fade at: " .. memory.readbyte(0x7E00B3))
 								allow = false
 							else
 								allow = true 
+								print("Health Sync Event")
 							end
 						end
 						return allow, value

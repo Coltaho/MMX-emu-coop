@@ -79,7 +79,11 @@ if emu.emulating() then
 				upgrades.boots = data.dashmode
 				
 				--UI Options
-				uiopts.overlay = data.overlay				
+				if opts.hpshare then
+					uiopts.overlay = true --force UI on if they are using soul link
+				else
+					uiopts.overlay = data.overlay				
+				end
 				
 				mainDriver = GameDriver(spec, data.forceSend) -- Notice: This is a global, specs can use it
 				IrcPipe(data, mainDriver):wake(server)
