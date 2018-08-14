@@ -2,7 +2,6 @@
 stdout.txt
 stderr.txt
 snes9x.conf
-snes9x.conf
 *.000
 *.001
 *.conf
