@@ -155,6 +155,9 @@ local xhp = 0
 local soulLink = {
 					dash = pngImage("./images/hpdash.png", nil, false, false),
 					background = pngImage("./images/hpbackground.png", nil, false, false),
+					bottom = pngImage("./images/hpbackgroundbottom.png", nil, false, false),
+					top = pngImage("./images/hpbackgroundtop.png", nil, false, false),
+					middle = pngImage("./images/hpbackgroundmiddle.png", nil, false, false),
 					dying = false
 				  }
 				  
@@ -252,8 +255,27 @@ function DrawGUIOverlay()
 			SoulLinkDeath()
 		end		
 		
+		
+		local tanks = (hearts.maxlife - 16) / 2 
+		
+		print(tanks)
+		
+		
+		drawIcon(soulLink["bottom"], 8, 78, "#0000FF")
+		
+		for j = 1, 8 do
+			drawIcon(soulLink["middle"], 8, 79 - (j * 4), "#0000FF")
+		end
+		
+		for j = 1, tanks do
+			drawIcon(soulLink["middle"], 8, 47 - (j * 4), "#0000FF")
+		end
+		
+		drawIcon(soulLink["top"], 8, 43 - (tanks * 4), "#FF0000")
 		--need more here to resize \ use different image based on heart count
-		drawIcon(soulLink["background"], 8, 11, "#FF0000")
+		--drawIcon(soulLink["background"], 8, 11, "#FF0000")
+		
+		
 		for i = 1, xhp do
 			drawIcon(soulLink["dash"], 12, 79 - (i * 2), "#FF0000")
 		end
