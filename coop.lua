@@ -76,6 +76,9 @@ if emu.emulating() then
 				opts.hpshare = data.hpshare
 				opts.ammoshare = data.ammoshare
 				opts.dashmode = data.dashmode
+				opts.bomode = data.bomode
+				
+				--Make sure locally boots are displayed
 				upgrades.boots = data.dashmode
 				
 				--UI Options

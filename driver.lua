@@ -365,8 +365,12 @@ function GameDriver:childTick()
 		memory.writebyte(0x7E1F99, 0x8)
 	end
 	
-	if opts.hpshare and memory.readbyte(0x7E1F7E) < 5 then
-		memory.writebyte(0x7E1F7E, 5)
+	if opts.hpshare and memory.readbyte(0x7E1F7E) < 3 then
+		memory.writebyte(0x7E1F7E, 3)
+	end
+	
+	if opts.bomode and memory.readbyte(0x7E0BDB) ~= 0 then
+		memory.writebyte(0x7E0BDB, 0)
 	end
 	
 	if self:isRunning(false) then

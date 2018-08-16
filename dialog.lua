@@ -5,7 +5,7 @@ local optionLetter = "o"
 if FCEU then optionLetter = "l" end
 
 function ircDialog()
-	local res, server, port, nick, partner, forceSend, dashmode, hpshare, ammoshare, overlay  = iup.GetParam("Connection settings", nil,
+	local res, server, port, nick, partner, dashmode, hpshare, bomode, ammoshare, overlay  = iup.GetParam("Connection settings", nil,
 	    "Enter an IRC server: %s\n" ..
 		"IRC server port: %i\n" ..
 		"%t\n" .. 
@@ -13,18 +13,18 @@ function ircDialog()
 		"Your nick: %s\n" ..
 		"Partner nick: %s\n" ..
 		"%t\n" .. -- <hr>
-		"[NYI]Are you restarting\rafter a crash? %b\n" ..
 		"Game Modes (MUST Match Partner)%t\n" ..
 		"Dash mode? %b[No,Yes]\n" ..
 		"[Beta]Current Health share? %b[No,Yes]\n" ..
 		"[NYI]Ammo share? %b[No,Yes]\n" ..
+		"[Beta]Buster Only? %b[No,Yes]\n" ..
 		"Individual Options%t\n" .. 
 		"Show Overlay? %b[No,Yes]\n"
 		,"irc.speedrunslive.com", 6667, "", "", 0,0,0,0,1)
 
 	if 0 == res then return nil end
 
-	return {server=server, port=port, nick=nick:lower(), partner=partner:lower(), forceSend=forceSend==1, hpshare=hpshare==1, ammoshare=ammoshare==1, dashmode=dashmode==1, overlay=overlay==1 }
+	return {server=server, port=port, nick=nick:lower(), partner=partner:lower(), bomode=bomode==1, forceSend=false, hpshare=hpshare==1, ammoshare=ammoshare==1, dashmode=dashmode==1, overlay=overlay==1 }
 end
 
 function selectDialog(specs, reason)
