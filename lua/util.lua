@@ -121,7 +121,7 @@ local selectedWeapon = 0
 local xhp = 0
 
 ----------------------------------------
-local gamefinished = true
+local gamefinished = false
 local pauseframes = 120
 local pos = 920
 function scrollCredits()
