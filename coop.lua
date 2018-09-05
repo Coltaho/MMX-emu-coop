@@ -1,16 +1,16 @@
-class   = require "pl.class"
-pretty  = require "pl.pretty"
-List    = require "pl.list"
-stringx = require "pl.stringx"
-tablex  = require "pl.tablex"
+class   = require "lua.pl.class"
+pretty  = require "lua.pl.pretty"
+List    = require "lua.pl.list"
+stringx = require "lua.pl.stringx"
+tablex  = require "lua.pl.tablex"
 
-require "version"
-require "util"
+require "lua.version"
+require "lua.util"
 
-require "modes.index"
-require "dialog"
-require "pipe"
-require "driver"
+require "lua.modes.index"
+require "lua.dialog"
+require "lua.pipe"
+require "lua.driver"
 
 -- PROGRAM
 
