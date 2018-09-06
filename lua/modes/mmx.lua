@@ -26,9 +26,10 @@ return {
 							allow = true
 						elseif value == 4 and value > previousValue and receiving then
 							message("Partner finished the game!")
-							gamefinished = true
 						elseif value > previousValue then
 							allow = true
+						end
+						if value == 4 and not receiving then
 							gamefinished = true
 						end
 						locations.sigma = value
