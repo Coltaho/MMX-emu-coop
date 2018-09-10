@@ -33,6 +33,7 @@ local firedData = {
 {name = "Purple", shots = 0}
 }
 
+local dashCount = 0
 
 local busterTable = {
 {active = false, value = 0, bullet = 0 },
@@ -45,25 +46,43 @@ local busterTable = {
 {active = false, value = 0, bullet = 0 }
 }
 
+
+local jumpActive = false
+local jumpCount = 0
+
 function DrawGUI()
 
-
---Tracks bullets as they fire
-for i = 1,8 do --There is 8 ammo data slots
-	local address = 0x7E1228 + ( (i-1) * 64 )
-	busterTable[i].value = memory.readbyte(address)
-	busterTable[i].bullet = memory.readbyte(address + 0x0A)
-
-	---Lemons, Greens, Blues, Purples
-	if busterTable[i].active == false and busterTable[i].value == 1 then -- and busterTable[i].bullet == 0 then -- Normal shots
-		firedData[busterTable[i].bullet+1].shots = firedData[busterTable[i].bullet+1].shots + 1
-		busterTable[i].active = true
+	local dashTimer = memory.readbyte(0x7E0BFA)
+	local xSprite = memory.readbyte(0x7E0BBF)
+	
+	if dashTimer == 30 and xSprite == 55 then
+		dashCount = dashCount + 1
 	end
 	
-	if busterTable[i].active == true and busterTable[i].value == 0 then -- resets the counter once the bullet has dissapeared
-		busterTable[i].active = false
+	if not jumpActive and xSprite == 25 then
+		jumpActive = true
+		jumpCount = jumpCount + 1
+	elseif jumpActive and xSprite == 28 then
+		jumpActive = false
 	end
-end
+	
+
+--Tracks bullets as they fire
+	for i = 1,8 do --There is 8 ammo data slots
+		local address = 0x7E1228 + ( (i-1) * 64 )
+		busterTable[i].value = memory.readbyte(address)
+		busterTable[i].bullet = memory.readbyte(address + 0x0A)
+		
+		---Lemons, Greens, Blues, Purples
+		if busterTable[i].active == false and busterTable[i].value == 1 then -- and busterTable[i].bullet == 0 then -- Normal shots
+			firedData[busterTable[i].bullet+1].shots = firedData[busterTable[i].bullet+1].shots + 1
+			busterTable[i].active = true
+		end
+		
+		if busterTable[i].active == true and busterTable[i].value == 0 then -- resets the counter once the bullet has dissapeared
+			busterTable[i].active = false
+		end
+	end
 -------------------------------
 
 
@@ -133,7 +152,12 @@ if(input["select"]) then
 	y = y + 8
 	
 	gui.text(x, y, "Total Shots: " .. shotsFired, "#FFFF00", "#000000")
-	
+	y = y + 8
+	gui.text(x, y, "----------", "#FFFF00", "#000000")
+	y = y + 8
+	gui.text(x, y, "Dashes: " .. dashCount, "#FFFF00", "#000000")
+	y = y + 8
+	gui.text(x, y, "Jumps: " .. jumpCount, "#FFFF00", "#000000")
 	
 end
 
