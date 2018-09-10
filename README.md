@@ -18,7 +18,8 @@ Everything shared by default:
 
 Options:
 * Dash Mode - Gives you boots at the start of the intro (you keep them through out)
-* Soul-Link (HP Shared) is NOT YET IMPLEMENTED
+* Soul-Link (HP Shared) is in BETA, play at your own risk
+* Buster Only - Locks weapon use but has some visual bugs if you try to use other weapons
 * Ammo Share is NOT YET IMPLEMENTED
 
 ## How to Use
