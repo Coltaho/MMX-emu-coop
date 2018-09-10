@@ -14,3 +14,6 @@ snes9x.conf
 *.006
 *.005
 *.cht
+*.cg
+*.cgp
+*.wch
