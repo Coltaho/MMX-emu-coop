@@ -121,7 +121,7 @@ local selectedWeapon = 0
 local xhp = 0
 
 ----------------------------------------
-local gamefinished = false
+gamefinished = false
 local pauseframes = 120
 local pos = 920
 function scrollCredits()
@@ -278,7 +278,7 @@ function DrawGUIOverlay()
 	end
     
 	--If we have hado, stop drawing hearts/subtanks
-	if not upgrades.hado then
+	if not upgrades.hado or locations.sigma < 2 then
 		--Draw hearts  
 		for i = 1, 8 do
 			if hearts[myhearts[i]] then

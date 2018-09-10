@@ -29,7 +29,8 @@ return {
 						elseif value > previousValue then
 							allow = true
 						end
-						if value == 4 and not receiving then
+						if value == 4 and value > previousValue and not receiving then
+							message("Congratulations! You won!")
 							gamefinished = true
 						end
 						locations.sigma = value
