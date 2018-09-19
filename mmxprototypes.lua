@@ -50,7 +50,12 @@ local busterTable = {
 local jumpActive = false
 local jumpCount = 0
 
+local grabCount = 0
+local grabActive = false
+
 function DrawGUI()
+
+
 
 	local dashTimer = memory.readbyte(0x7E0BFA)
 	local xSprite = memory.readbyte(0x7E0BBF)
@@ -66,7 +71,18 @@ function DrawGUI()
 		jumpActive = false
 	end
 	
-
+	local grabCheck = memory.readbyte(0x7E0C06)
+	
+	if not grabActive and grabCheck == 2 then
+		grabActive = true
+		grabCount = grabCount + 1
+	elseif not grabActive and grabCheck == 1 then
+		grabActive = true
+		grabCount = grabCount + 1
+	elseif grabActive and grabCheck ~= 2 and grabCheck ~= 1 then
+		grabActive = false
+	end
+	
 --Tracks bullets as they fire
 	for i = 1,8 do --There is 8 ammo data slots
 		local address = 0x7E1228 + ( (i-1) * 64 )
@@ -158,6 +174,9 @@ if(input["select"]) then
 	gui.text(x, y, "Dashes: " .. dashCount, "#FFFF00", "#000000")
 	y = y + 8
 	gui.text(x, y, "Jumps: " .. jumpCount, "#FFFF00", "#000000")
+	y = y + 8
+	gui.text(x, y, "Grabs: " .. grabCount, "#FFFF00", "#000000")
+	
 	
 end
 

@@ -116,6 +116,7 @@ local sigmaanimation = {}
 
 local creditbackground = nil
 local credittext = nil
+local animated = nil
 					
 local selectedWeapon = 0
 local xhp = 0
@@ -242,10 +243,10 @@ sigmaanimation = {
 
 creditbackground = loadImage("./images/creditbackground.png")
 credittext = loadImage("./images/credittext.png")
+
+animated = animatedImage(sigmaanimation, 3, 0.5)
 end
 
-
-local animated = animatedImage(sigmaanimation, 3, 0.5)
 
 local bytetable = {
 0x00, 0x02, 0x02, 0x02, 0x071, 0xD1, 0x0E, 0x00, 0x78, 0x01, 0x15, 0x00, 0x10, 0xFB, 0x81, 0x00, 0x00, 0x29, 0x04, 0x04, 0xC9, 0xB3, 0x22, 0x8C, 0x60, 0x00, 0x86, 0xFE, 0x00, 0xFC, 0x00, 0x03, 0x2E, 0xCA, 0xD1, 0x0E, 0x78, 0x01, 0x02, 0x02, 0x03, 0x00, 0x13, 0x04, 0x00, 0x05, 0x06, 0xFF, 0x00, 0x00, 0x00, 0x08, 0x00, 0x01, 0x80, 0x01, 0x02, 0x02, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00
@@ -315,10 +316,8 @@ function DrawGUIOverlay()
 		gui.gdoverlay(180, 207, upgradeIcons[5], 0, 0, 256, 224 , 1.0)
 	end
 	
-	--Reads selected weapon every frame (multiple of 2 so divided by to for 1 - 8)
+	--Reads selected weapon every frame (multiple of 2 so divided by two for 1 - 8)
 	--Then draws a box around the icons
-	
-	
 	selectedWeapon = memory.readbyte(0x7E0BDB) / 2
 	if selectedWeapon ~= 0 then
 		gui.box(selectedWeapon * 16 + 1, 208, (selectedWeapon * 16) + 16, 223, "#FFFFFF00", "#FFFF00FF")
